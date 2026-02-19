@@ -1,0 +1,15 @@
+{
+    "model_type": "RandomForestClassifier",
+    "features": [
+        "salary",
+        "experience",
+        "is_young"
+    ],
+    "optimal_threshold": 0.75,
+    "manual_threshold": 0.5,
+    "auc_cv_mean": 0.8950000000000001,
+    "train_accuracy": 1.0,
+    "test_accuracy": 0.7142857142857143,
+    "pr_auc": 0.8557142857142859,
+    "created_at": "2026-01-25T09:04:25.029629"
+}

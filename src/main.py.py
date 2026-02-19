@@ -1,1 +1,0 @@
-print("ML basics project started")
