@@ -4,10 +4,18 @@ import pandas as pd
 from pydantic import BaseModel
 from sklearn.pipeline import Pipeline
 from sklearn.metrics import classification_report
+import os
+
 
 app = FastAPI()
 
-MODEL_PATH = r"C:\Users\volod\ml_engineer\ml_basics\models\titanic_model.pkl"
+
+
+Base_Dir=os.path.dirname(__file__)
+print(f"📍 Папка скрипта (BASE_DIR): {Base_Dir}")
+MODEL_PATH=os.path.join(Base_Dir,"..","models","titanic_model.pkl")
+print(f"📂 Шукаю модель за цим шляхом: {MODEL_PATH}")
+
 try:
     model = joblib.load(MODEL_PATH)
     print("✅ Модель успішно завантажена!")
