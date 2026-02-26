@@ -1,54 +1,46 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Form, Request
+from fastapi.templating import Jinja2Templates
+from fastapi.staticfiles import StaticFiles # Якщо будуть картинки
+import uvicorn
 import joblib
-import pandas as pd
-from pydantic import BaseModel
-from sklearn.pipeline import Pipeline
-from sklearn.metrics import classification_report
-import os
-
+import numpy as np
 
 app = FastAPI()
 
+# Вказуємо шлях до папки з твоїм HTML
+templates = Jinja2Templates(directory="templates")
 
+# Завантажуємо твою навчену модель ШІ
+# Переконайся, що файл model.pkl лежить у тій же папці
+model = joblib.load("model.pkl")
 
-Base_Dir=os.path.dirname(__file__)
-print(f"📍 Папка скрипта (BASE_DIR): {Base_Dir}")
-MODEL_PATH=os.path.join(Base_Dir,"..","models","titanic_model.pkl")
-print(f"📂 Шукаю модель за цим шляхом: {MODEL_PATH}")
+# 1. ГОЛОВНА СТОРІНКА (показуємо твій крутий дизайн)
+@app.get("/")
+async def read_index(request: Request):
+    return templates.TemplateResponse("index.html", {"request": request})
 
-try:
-    model = joblib.load(MODEL_PATH)
-    print("✅ Модель успішно завантажена!")
-except Exception as e:
-    print(f"❌ Помилка при завантаженні моделі: {e}")
-    model = None # Позначаємо, що моделі немає
-# 1. Створюємо "Трафарет" (згадай нашу розмову про Class)
-class Passenger_tytanic(BaseModel):
-    pclass:int
-    age:float
-    fare:float
+# 2. ЛОГІКА ПЕРЕДБАЧЕННЯ (обробка форми)
+@app.post("/predict")
+async def predict(
+    request: Request,
+    pclass: int = Form(...),
+    age: float = Form(...),
+    fare: float = Form(...)
+):
+    # Готуємо дані для моделі (перетворюємо в масив numpy)
+    features = np.array([[pclass, age, fare]])
+    
+    # Робимо прогноз: 0 - загинув, 1 - вижив
+    prediction = model.predict(features)[0]
+    
+    # Визначаємо текст результату
+    result_text = "Pasażer mógł przeżyć!" if prediction == 1 else "Pasażer prawdopodobnie by zginął."
+    
+    # Повертаємо результат на нову або ту ж саму сторінку
+    return templates.TemplateResponse("result.html", {
+        "request": request, 
+        "prediction_text": result_text
+    })
 
-@app.post("/get-result")
-def process_data(data: Passenger_tytanic):
-    if model is None: 
-        return {"error": "Model not loaded"}
-    else:
-        features = [[data.pclass, data.age, data.fare]]
-        result=model.predict(features)
-        result=int(result[0])
-        if result==1:
-            res="passenger survived"
-        else:
-            res="passenger died"
-        return {"Status":res,
-                "Prediction":result,
-                "Passenger class":data.pclass
-                }
-
-@app.get("/INFO")
-def model_info():
-    return {
-        "model_name": "Titanic Survival Predictor",
-        "version": "1.0.0",
-        "created_at": "2023-10-27" # Можеш вказати дату створення своєї моделі
-    }
+if __name__ == "__main__":
+    uvicorn.run(app, host="127.0.0.1", port=8000)
