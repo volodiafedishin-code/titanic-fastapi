@@ -11,10 +11,14 @@ app = FastAPI()
 import os
 
 # Отримуємо шлях до папки, де лежить цей файл (inference)
-base_path = os.path.dirname(__file__)
-templates_path = os.path.join(base_path, "templates")
+import os
+from fastapi.templating import Jinja2Templates
 
-templates = Jinja2Templates(directory=templates_path)
+# Отримуємо шлях до папки, де лежить app.py
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+
+# Чітко вказуємо шлях до папки з шаблонами
+templates = Jinja2Templates(directory=os.path.join(BASE_DIR, "templates"))
 
 # Завантажуємо твою навчену модель ШІ
 # Переконайся, що файл model.pkl лежить у тій же папці
