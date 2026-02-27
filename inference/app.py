@@ -8,7 +8,13 @@ import numpy as np
 app = FastAPI()
 
 # Вказуємо шлях до папки з твоїм HTML
-templates = Jinja2Templates(directory="templates")
+import os
+
+# Отримуємо шлях до папки, де лежить цей файл (inference)
+base_path = os.path.dirname(__file__)
+templates_path = os.path.join(base_path, "templates")
+
+templates = Jinja2Templates(directory=templates_path)
 
 # Завантажуємо твою навчену модель ШІ
 # Переконайся, що файл model.pkl лежить у тій же папці
