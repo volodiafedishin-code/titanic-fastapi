@@ -18,7 +18,7 @@ templates = Jinja2Templates(directory=templates_path)
 
 # Завантажуємо твою навчену модель ШІ
 # Переконайся, що файл model.pkl лежить у тій же папці
-model=joblib.load("titanic_model")
+model=joblib.load("titanic_model.pkl")
 
 # 1. ГОЛОВНА СТОРІНКА (показуємо твій крутий дизайн)
 @app.get("/")
