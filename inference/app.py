@@ -38,8 +38,8 @@ async def read_index(request: Request):
 
 # 2. ЛОГІКА ПЕРЕДБАЧЕННЯ (обробка форми)
 @app.post("/predict")
-async def predict(pclass: int = Form(...), age: float = Form(...), fare: float = Form(...)):
-    features = np.array([[pclass, age, fare]])
+async def predict(pclass: int = Form(...), age: float = Form(...), fare: float = Form(...), sex: int = Form(...)):
+    features = np.array([[pclass, age, fare, sex]])
     prediction = model.predict(features)[0]
     if prediction == 1:
         text = "Виживе! 🟢"  

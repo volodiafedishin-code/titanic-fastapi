@@ -12,8 +12,16 @@ from sklearn.metrics import classification_report
 df = pd.read_csv(r"C:\Users\volod\ml_engineer\ml_basics\data\tytanic.csv")
 
 print(df)
+
+# Створюємо словник-карту для заміни
+gender_map = {'male': 0, 'female': 1}
+
+# Застосовуємо заміну до колонки 'Sex'
+df['Sex'] = df['Sex'].map(gender_map)
+
+print(df)
 # Для прикладу створимо змінні X та y вручну
-X = df[['Age', 'Fare', 'Pclass']]
+X = df[['Age', 'Fare', 'Pclass','Sex']]
 y = df['Survived']
 
 # 2. Розділення на Train/Test (30% на перевірку)
