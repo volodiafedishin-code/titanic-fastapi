@@ -38,26 +38,15 @@ async def read_index(request: Request):
 
 # 2. ЛОГІКА ПЕРЕДБАЧЕННЯ (обробка форми)
 @app.post("/predict")
-async def predict(
-    request: Request,
-    pclass: int = Form(...),
-    age: float = Form(...),
-    fare: float = Form(...)
-):
-    # Готуємо дані для моделі (перетворюємо в масив numpy)
+async def predict(pclass: int = Form(...), age: float = Form(...), fare: float = Form(...)):
     features = np.array([[pclass, age, fare]])
-    
-    # Робимо прогноз: 0 - загинув, 1 - вижив
     prediction = model.predict(features)[0]
-    
-    # Визначаємо текст результату
-    result_text = "Pasażer mógł przeżyć!" if prediction == 1 else "Pasażer prawdopodobnie by zginął."
-    
-    # Повертаємо результат на нову або ту ж саму сторінку
-    return templates.TemplateResponse("result.html", {
-        "request": request, 
-        "prediction_text": result_text
-    })
+    if prediction == 1:
+        text = "Виживе! 🟢"  
+    else:
+        text = "Не виживе... 🔴"
+    return {"prediction_text": text}
+
 
 if __name__ == "__main__":
     uvicorn.run(app, host="127.0.0.1", port=8000)

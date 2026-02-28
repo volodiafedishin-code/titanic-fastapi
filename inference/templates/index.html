@@ -845,6 +845,26 @@
           </form>
       </div>
   </div> 
+  <div id="result" style="margin-top: 20px; font-size: 1.5rem; text-align: center;"></div>
+
+  <script>
+      const form = document.querySelector('form');
+      const resultDiv = document.getElementById('result');
+
+      form.onsubmit = async (e) => {
+          e.preventDefault(); // Зупиняємо стандартне перезавантаження сторінки
+          resultDiv.innerHTML = "Рахую шанси... ⏳";
+
+          const formData = new FormData(form);
+          const response = await fetch('/predict', {
+              method: 'POST',
+              body: formData
+          });
+
+          const data = await response.json();
+          resultDiv.innerHTML = data.prediction_text; // Магічно вставляємо результат
+      };
+  </script>
 
   <footer>
     ⚓ Świat Statków · Encyklopedia Morska · Wszystkie prawa zastrzeżone
