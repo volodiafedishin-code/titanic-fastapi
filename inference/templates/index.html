@@ -848,22 +848,28 @@
   <div id="result" style="margin-top: 20px; font-size: 1.5rem; text-align: center;"></div>
 
   <script>
-      const form = document.querySelector('form');
-      const resultDiv = document.getElementById('result');
-
-      form.onsubmit = async (e) => {
-          e.preventDefault(); // Зупиняємо стандартне перезавантаження сторінки
-          resultDiv.innerHTML = "Рахую шанси... ⏳";
-
-          const formData = new FormData(form);
-          const response = await fetch('/predict', {
-              method: 'POST',
-              body: formData
-          });
-
-          const data = await response.json();
-          resultDiv.innerHTML = data.prediction_text; // Магічно вставляємо результат
-      };
+    const form = document.querySelector('form');
+    const resultDiv = document.getElementById('result');
+    
+    form.onsubmit = async (e) => {
+        e.preventDefault();
+        resultDiv.innerHTML = "Обробка... ⏳";
+    
+        // Автоматично збирає всі поля форми за їх атрибутом 'name'
+        const formData = new FormData(form);
+    
+        const response = await fetch('/predict', {
+            method: 'POST',
+            body: formData // Передаємо як FormData, а не JSON!
+        });
+    
+        if (response.ok) {
+            const data = await response.json();
+            resultDiv.innerHTML = data.prediction_text;
+        } else {
+            resultDiv.innerHTML = "Помилка на сервері ❌";
+        }
+    };
   </script>
 
   <footer>
