@@ -42,9 +42,9 @@ async def predict(pclass: int = Form(...), age: float = Form(...), fare: float =
     features = np.array([[pclass, age, fare, sex]])
     prediction = model.predict(features)[0]
     if prediction == 1:
-        text = "Виживе! 🟢"  
+        text = "Przeżyje! 🟢"  
     else:
-        text = "Не виживе... 🔴"
+        text = "Nie przeżyje... 🔴"
     return {"prediction_text": text}
 
 

@@ -835,12 +835,12 @@
                         style="width: 100%; padding: 12px; background: var(--navy); border: 1px solid var(--ocean); border-radius: 10px; color: white;">
               </div>
               <div class="input-group">
-                  <label style="display: block; margin-bottom: 8px; color: var(--sky);">Cena biletu</label>
+                  <label style="display: block; margin-bottom: 8px; color: var(--sky);">Cena biletu(£0-£1000)</label>
                   <input type="text" name="fare" placeholder="np. 1" 
                         style="width: 100%; padding: 12px; background: var(--navy); border: 1px solid var(--ocean); border-radius: 10px; color: white;">
               </div>
               <div class="input-group">
-                  <label style="display: block; margin-bottom: 8px; color: var(--sky);">Płeć</label>
+                  <label style="display: block; margin-bottom: 8px; color: var(--sky);">Płeć(0=męska,1=Żenska)</label>
                   <input type="text" name="sex" placeholder="np. 1" 
                         style="width: 100%; padding: 12px; background: var(--navy); border: 1px solid var(--ocean); border-radius: 10px; color: white;">
               </div>              
@@ -858,7 +858,7 @@
     
     form.onsubmit = async (e) => {
         e.preventDefault();
-        resultDiv.innerHTML = "Обробка... ⏳";
+        resultDiv.innerHTML = "Przetwarzanie... ⏳";
     
         // Автоматично збирає всі поля форми за їх атрибутом 'name'
         const formData = new FormData(form);
@@ -872,7 +872,7 @@
             const data = await response.json();
             resultDiv.innerHTML = data.prediction_text;
         } else {
-            resultDiv.innerHTML = "Помилка на сервері ❌";
+            resultDiv.innerHTML = "Bląd na serwerze ❌";
         }
     };
   </script>
